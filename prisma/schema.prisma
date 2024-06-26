@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int          @id @unique @default(autoincrement())
+  role               Roles        @default(user)
+  firstname          String?
+  lastname           String?
+  phone_number       String       @unique
+  email              String?      @unique
+  password           String
+  is_blocked          Boolean      @default(false)
+  is_activate_account Boolean      @default(false)
+  refresh_token      String?
+  orders             Order[]
+  address            UserAddress?
+}
+
+model Order {
+  id        Int         @id @unique @default(autoincrement())
+  userId    Int?
+  productId Int
+  count     Int
+  status    OrderStatus @default(in_the_proccess)
+  product   Product     @relation(fields: [productId], references: [id])
+  user      User?       @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id           Int      @id @unique @default(autoincrement())
+  name         String
+  cost         Int
+  description  String?
+  puctures_src String[]
+  order        Order[]
+}
+
+model UserAddress {
+  id                    Int     @id @unique @default(autoincrement())
+  userId                Int     @unique
+  city                  String
+  street                String
+  nova_post_departament String?
+  user                  User    @relation(fields: [userId], references: [id])
+}
+
+enum Roles {
+  user
+  admin
+  moderator
+}
+
+enum OrderStatus {
+  sent
+  received
+  transit
+  in_the_proccess
+  returned
+}
