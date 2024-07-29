@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { AuthUserDto } from './dto/auth-user.dto';
 import { UserDbService } from '../db/user.db.service';
-import { hash } from '../common/utils/bcrypt.util';
+import { hash } from '../common/libs/bcrypt.util';
 import { User } from '.prisma/client';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';

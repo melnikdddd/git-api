@@ -1,4 +1,10 @@
-import { Controller, Get, NotFoundException, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { UserDbService } from '../db/user.db.service';
 import { AccessTokenGuard } from '../common/guards/access-token.guard';
 import { RequestWithUser } from '../common/types/request';

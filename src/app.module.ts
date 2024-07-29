@@ -4,8 +4,9 @@ import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { DbModule } from './db/db.module';
 import { ConfigModule } from '@nestjs/config';
-import { AdminModule } from './admin/admin.module';
 import { ModeratorModule } from './moderator/moderator.module';
+import { TelegramModule } from './telegram/telegram.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { ModeratorModule } from './moderator/moderator.module';
     UserModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     DbModule,
-    AdminModule,
     ModeratorModule,
+    ProductModule,
+    TelegramModule,
   ],
   controllers: [],
   providers: [],
