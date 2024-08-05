@@ -14,6 +14,7 @@ import { Tokens } from './types/tokens';
 import { RefreshTokenGuard } from '../common/guards/refresh-token.guard';
 import { AccessTokenGuard } from '../common/guards/access-token.guard';
 import { RequestWithUser } from '../common/types/request';
+import { ModeratorGuard } from '../common/guards/moderator.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,14 @@ export class AuthController {
   @Post('sign-up')
   public async signUp(@Body() data: AuthUserDto, @Res() res: Response) {
     const tokens: Tokens = await this.authService.register(data);
+    this.setCookies(res, tokens.access_token, tokens.refresh_token);
+    res.status(201).send('success');
+  }
+
+  @Post('create-admin')
+  @UseGuards(ModeratorGuard)
+  public async createAdmin(@Body() data: AuthUserDto, @Res() res: Response) {
+    const tokens: Tokens = await this.authService.registerAdmin(data);
     this.setCookies(res, tokens.access_token, tokens.refresh_token);
     res.status(201).send('success');
   }

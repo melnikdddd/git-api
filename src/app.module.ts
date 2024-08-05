@@ -4,9 +4,10 @@ import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { DbModule } from './db/db.module';
 import { ConfigModule } from '@nestjs/config';
-import { ModeratorModule } from './moderator/moderator.module';
 import { TelegramModule } from './telegram/telegram.module';
 import { ProductModule } from './product/product.module';
+import { StorageService } from './storage/storage.service';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -17,11 +18,11 @@ import { ProductModule } from './product/product.module';
     UserModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     DbModule,
-    ModeratorModule,
     ProductModule,
     TelegramModule,
+    StorageModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [StorageService],
 })
 export class AppModule {}

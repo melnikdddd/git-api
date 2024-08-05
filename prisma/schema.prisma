@@ -27,6 +27,7 @@ model Order {
   userId    String?
   productId String
   count     Int
+  code      String      @unique
   status    OrderStatus @default(in_the_proccess)
   product   Product     @relation(fields: [productId], references: [id])
   user      User?       @relation(fields: [userId], references: [id])
@@ -37,7 +38,8 @@ model Product {
   name         String   @unique
   price        Int
   description  String?
-  code         String
+  is_available Boolean? @default(true)
+  code         String   @unique
   puctures_src String[]
   categories   String[]
   order        Order[]

@@ -11,8 +11,7 @@ import { RequestWithUser } from '../common/types/request';
 
 @Controller('user')
 export class UserController {
-  constructor(private dbUser: UserDbService) {
-  }
+  constructor(private dbUser: UserDbService) {}
 
   @Get('me')
   @UseGuards(AccessTokenGuard)

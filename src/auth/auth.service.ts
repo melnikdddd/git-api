@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { AuthUserDto } from './dto/auth-user.dto';
 import { UserDbService } from '../db/user.db.service';
-import { hash } from '../common/libs/bcrypt.util';
 import { User } from '.prisma/client';
 import { compare } from 'bcrypt';
+import { hash } from '../common/libs/bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Tokens } from './types/tokens';
 import * as process from 'process';
@@ -22,7 +22,7 @@ export class AuthService {
   ) {}
 
   public async login(data: AuthUserDto): Promise<Tokens> {
-    const { phone: phone_number, password } = data;
+    const { phone_number: phone_number, password } = data;
     const user: User = await this.dbUser.findOneByPhone(phone_number);
 
     if (!user) {
@@ -43,7 +43,7 @@ export class AuthService {
   }
 
   public async register(data: AuthUserDto): Promise<Tokens> {
-    const { phone: phone_number, password } = data;
+    const { phone_number: phone_number, password } = data;
 
     if (await this.dbUser.findOneByPhone(phone_number)) {
       throw new ConflictException('Phone number already exists');
@@ -52,7 +52,7 @@ export class AuthService {
     const hashPassword = await hash(password);
 
     const user: User = await this.dbUser.createOne({
-      phone: phone_number,
+      phone_number: phone_number,
       password: hashPassword,
     });
 
@@ -63,6 +63,25 @@ export class AuthService {
 
   public async logout(userId: string) {
     return this.dbUser.updateOne(userId, { refresh_token: null });
+  }
+
+  public async registerAdmin(data: AuthUserDto): Promise<Tokens> {
+    const { phone_number: phone_number, password } = data;
+
+    if (await this.dbUser.findOneByPhone(phone_number)) {
+      throw new ConflictException('Phone number already exists');
+    }
+
+    const hashPassword = await hash(password);
+
+    const user: User = await this.dbUser.createAdmin({
+      phone_number: phone_number,
+      password: hashPassword,
+    });
+
+    const tokens = await this.getTokens(user.id, user.phone_number, user.role);
+    await this.updateRefreshToken(user.id, tokens.refresh_token);
+    return tokens;
   }
 
   async refreshTokens(userId: string, refreshToken: string) {

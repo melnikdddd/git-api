@@ -7,6 +7,7 @@ import { RefreshTokenGuard } from '../common/guards/refresh-token.guard';
 import { AccessTokenGuard } from '../common/guards/access-token.guard';
 import { RefreshTokenStrategy } from '../common/strategy/refresh-token.strategy';
 import { AccessTokenStrategy } from '../common/strategy/access-token.strategy';
+import { ModeratorGuard } from '../common/guards/moderator.guard';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AccessTokenStrategy } from '../common/strategy/access-token.strategy';
     AccessTokenGuard,
     RefreshTokenStrategy,
     AccessTokenStrategy,
+    ModeratorGuard,
   ],
 })
 export class AuthModule {}

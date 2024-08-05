@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Roles } from '@prisma/client';
 import { AuthUserDto } from '../auth/dto/auth-user.dto';
 import { User } from '.prisma/client';
 
@@ -27,7 +27,7 @@ export class UserDbService {
   }
 
   public async createOne(data: AuthUserDto): Promise<User> {
-    const { phone: phone_number, password } = data;
+    const { phone_number, password } = data;
     try {
       return await this.prisma.user.create({
         data: {
@@ -37,6 +37,21 @@ export class UserDbService {
       });
     } catch (error) {
       throw new Error('Failed to create user');
+    }
+  }
+
+  public async createAdmin(data: AuthUserDto): Promise<User> {
+    const { phone_number, password } = data;
+    try {
+      return await this.prisma.user.create({
+        data: {
+          phone_number,
+          password,
+          role: Roles.admin,
+        },
+      });
+    } catch (error) {
+      throw new Error('Failed to create admin');
     }
   }
 
