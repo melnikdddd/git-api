@@ -22,15 +22,23 @@ model User {
   address             UserAddress?
 }
 
-model Order {
-  id        String      @id @default(uuid())
-  userId    String?
+model Media {
+  id        String  @id @default(uuid())
+  src       String
   productId String
-  count     Int
-  code      String      @unique
-  status    OrderStatus @default(in_the_proccess)
-  product   Product     @relation(fields: [productId], references: [id])
-  user      User?       @relation(fields: [userId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  userId     String
+  productId  String
+  count      Int
+  code       String      @unique
+  status     OrderStatus @default(in_the_proccess)
+  pay_status PayStatus?  @default(not_paid)
+  product    Product     @relation(fields: [productId], references: [id])
+  user       User?       @relation(fields: [userId], references: [id])
 }
 
 model Product {
@@ -40,9 +48,9 @@ model Product {
   description  String?
   is_available Boolean? @default(true)
   code         String   @unique
-  puctures_src String[]
   categories   String[]
   order        Order[]
+  media        Media[]
 }
 
 model UserAddress {
@@ -58,6 +66,12 @@ enum Roles {
   user
   admin
   moderator
+}
+
+enum PayStatus {
+  paid
+  not_paid
+  only_delivery
 }
 
 enum OrderStatus {

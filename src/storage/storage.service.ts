@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
+import { BucketNames } from './bucket-names.types';
 
 @Injectable()
 export class StorageService {
@@ -15,7 +16,7 @@ export class StorageService {
 
   async uploadFile(
     file: Buffer,
-    bucket: string,
+    bucket: BucketNames,
     name: string,
   ): Promise<AWS.S3.ManagedUpload.SendData> {
     const params = {
@@ -37,7 +38,7 @@ export class StorageService {
   }
 
   async deleteFile(
-    bucket: string,
+    bucket: BucketNames,
     name: string,
   ): Promise<AWS.S3.DeleteObjectOutput> {
     const params = {

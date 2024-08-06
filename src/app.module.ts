@@ -8,6 +8,7 @@ import { TelegramModule } from './telegram/telegram.module';
 import { ProductModule } from './product/product.module';
 import { StorageService } from './storage/storage.service';
 import { StorageModule } from './storage/storage.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { StorageModule } from './storage/storage.module';
     ProductModule,
     TelegramModule,
     StorageModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [StorageService],

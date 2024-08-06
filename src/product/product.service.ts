@@ -4,10 +4,14 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from '@prisma/client';
 import { GetProductsDto } from './dto/get-products.dto';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class ProductService {
-  constructor(private dbProduct: ProductDbService) {}
+  constructor(
+    private dbProduct: ProductDbService,
+    private storage: StorageService,
+  ) {}
 
   public async createProduct(data: CreateProductDto): Promise<Product> {
     try {
