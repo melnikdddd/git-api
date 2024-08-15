@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { UserDbService } from './user.db.service';
 import { ProductDbService } from './product.db.service';
 import { OrderDbService } from './order.db.service';
+import { AddressDbService } from './address.db.service';
 
 @Global()
 @Module({
@@ -14,7 +15,8 @@ import { OrderDbService } from './order.db.service';
     UserDbService,
     ProductDbService,
     OrderDbService,
+    AddressDbService,
   ],
-  exports: [UserDbService, ProductDbService, OrderDbService],
+  exports: [UserDbService, ProductDbService, OrderDbService, AddressDbService],
 })
 export class DbModule {}

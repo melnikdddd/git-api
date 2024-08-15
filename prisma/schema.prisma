@@ -54,12 +54,14 @@ model Product {
 }
 
 model UserAddress {
-  id                    String  @id @default(uuid())
-  userId                String  @unique
-  city                  String
-  street                String
-  nova_post_departament String?
-  user                  User    @relation(fields: [userId], references: [id])
+  id                   String @id @default(uuid())
+  fistname             String
+  lastname             String
+  userId               String @unique
+  city                 String
+  street               String
+  nova_post_department Int?
+  user                 User   @relation(fields: [userId], references: [id])
 }
 
 enum Roles {

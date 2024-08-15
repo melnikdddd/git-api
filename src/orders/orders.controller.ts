@@ -18,6 +18,7 @@ import { AccessTokenGuard } from '../common/guards/access-token.guard';
 import { RequestWithUser } from '../common/types/request';
 import { AdminGuard } from '../common/guards/admin.guard';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { getUserIdFromReq } from '../common/utils/request.utils';
 
 @Controller('orders')
 export class OrdersController {
@@ -32,7 +33,7 @@ export class OrdersController {
     @Body() data: CreateOrderDto,
     @Req() req: RequestWithUser,
   ): Promise<Order> {
-    const userId = this.getUserId(req, data.userId);
+    const userId = getUserIdFromReq(req, data.userId);
     return this.ordersService.createOrder(data, userId);
   }
 
@@ -42,7 +43,7 @@ export class OrdersController {
     @Query('userId') id: string,
     @Req() req: RequestWithUser,
   ): Promise<Order[]> {
-    const userId = this.getUserId(req, id);
+    const userId = getUserIdFromReq(req, id);
     return this.ordersService.findAllOrdersByUserId(userId);
   }
 
@@ -64,7 +65,7 @@ export class OrdersController {
     @Param('id') id: string,
     @Req() req: RequestWithUser,
   ) {
-    const userId = this.getUserId(req, req['user']['sub']);
+    const userId = getUserIdFromReq(req, req['user']['sub']);
     const role = req.user['role'];
     return this.ordersService.findOneById(id, role, userId);
   }
@@ -75,16 +76,8 @@ export class OrdersController {
     @Query('code') code: string,
     @Req() req: RequestWithUser,
   ): Promise<Order> {
-    const userId = this.getUserId(req, req['user']['sub']);
+    const userId = getUserIdFromReq(req, req['user']['sub']);
     const role = req.user['role'];
     return this.ordersService.findOneByCode(code, userId, role);
-  }
-
-  private getUserId(req: RequestWithUser, userId: string): string {
-    const role = req.user['role'];
-    if (role === this.UserRoles.ADMIN || role === this.UserRoles.MODERATOR) {
-      return userId;
-    }
-    return req.user['sub'];
   }
 }
