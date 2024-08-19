@@ -8,18 +8,26 @@ datasource db {
 }
 
 model User {
-  id                  String       @id @default(uuid())
-  role                Roles        @default(user)
-  firstname           String?
-  lastname            String?
-  phone_number        String       @unique
-  email               String?      @unique
-  password            String
-  is_blocked          Boolean      @default(false)
-  is_activate_account Boolean      @default(false)
-  refresh_token       String?
-  orders              Order[]
-  address             UserAddress?
+  id            String         @id @default(uuid())
+  role          Roles          @default(user)
+  firstname     String?
+  lastname      String?
+  phone_number  String         @unique
+  email         String?        @unique
+  password      String
+  is_blocked    Boolean        @default(false)
+  refresh_token String?
+  orders        Order[]
+  address       UserAddress?
+  telegram_info  TelegramUserInfo?
+}
+
+model TelegramUserInfo {
+  id        String  @id @default(uuid())
+  chat_id   String  @unique
+  user      User    @relation(fields: [userId], references: [id])
+  auth_code String?
+  userId    String  @unique
 }
 
 model Media {

@@ -9,11 +9,19 @@ import { ProductModule } from './product/product.module';
 import { StorageService } from './storage/storage.service';
 import { StorageModule } from './storage/storage.module';
 import { OrdersModule } from './orders/orders.module';
+import { TelegrafModule } from 'nestjs-telegraf';
+import * as process from 'process';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    TelegrafModule.forRoot({
+      token: process.env.USER_TELEGRAM_BOT_KEY,
+    }),
+    TelegrafModule.forRoot({
+      token: process.env.ADMIN_TELEGRAM_BOT_KEY,
     }),
     AuthModule,
     UserModule,

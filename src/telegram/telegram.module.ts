@@ -3,8 +3,6 @@ import { UserTelegramService } from './user-telegram.service';
 import { AdminTelegramService } from './admin-telegram.service';
 
 @Module({
-  providers: [],
+  providers: [AdminTelegramService, UserTelegramService],
 })
-export class TelegramModule {
-  providers: [AdminTelegramService, UserTelegramService];
-}
+export class TelegramModule {}

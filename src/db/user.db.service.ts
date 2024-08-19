@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { PrismaClient, Roles } from '@prisma/client';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaClient, Roles, TelegramUserInfo } from '@prisma/client';
 import { AuthUserDto } from '../auth/dto/auth-user.dto';
 import { User } from '.prisma/client';
 
@@ -15,6 +15,26 @@ export class UserDbService {
     });
 
     return user ? user : null;
+  }
+
+  public async getUserTelegramInfoByUserId(
+    userId: string,
+  ): Promise<TelegramUserInfo | null> {
+    const telegramInfo = await this.prisma.telegramUserInfo.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+    return telegramInfo ? telegramInfo : null;
+  }
+
+  public async addTelegramInfo(user: User, chatId: string) {
+    return this.prisma.telegramUserInfo.create({
+      data: {
+        chat_id: chatId,
+        userId: user.id,
+      },
+    });
   }
 
   public async findOneByPhone(phone: string): Promise<User | null> {
